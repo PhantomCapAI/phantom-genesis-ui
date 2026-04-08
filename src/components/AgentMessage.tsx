@@ -27,7 +27,8 @@ function TypeBadge({ type }: { type: SwarmMessage["type"] }) {
 
 export function AgentMessage({ msg }: { msg: SwarmMessage }) {
   const agent = AGENTS[msg.agent];
-  const color = agent?.color ?? "#666";
+  const color = msg.color || agent?.color || "#666";
+  const text = msg.content || msg.text || "";
 
   return (
     <div className="flex gap-3 py-3 px-4">
@@ -37,20 +38,23 @@ export function AgentMessage({ msg }: { msg: SwarmMessage }) {
           <span className="font-semibold text-sm" style={{ color }}>
             {msg.agent}
           </span>
-          <span className="text-[11px] text-zinc-600">{agent?.role}</span>
+          <span className="text-[11px] text-zinc-600">{msg.role || agent?.role}</span>
           <TypeBadge type={msg.type} />
+          {msg.round != null && msg.round !== 0 && (
+            <span className="text-[10px] text-zinc-700 font-mono">R{msg.round}</span>
+          )}
           <span className="text-[11px] text-zinc-700 ml-auto font-mono">
             {formatTime(msg.timestamp)}
           </span>
         </div>
         <p
-          className="text-sm text-zinc-300 leading-relaxed font-mono"
+          className="text-sm text-zinc-300 leading-relaxed"
           style={{
             borderLeft: `3px solid ${color}`,
             paddingLeft: "0.75rem",
           }}
         >
-          {msg.content}
+          {text}
         </p>
       </div>
     </div>
