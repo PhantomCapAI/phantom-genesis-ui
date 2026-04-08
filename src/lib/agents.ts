@@ -10,6 +10,7 @@ export const AGENTS: Record<string, Agent> = {
   Claire: { name: "Claire", role: "Content", color: "#F472B6" },
   Nova: { name: "Nova", role: "Creative", color: "#818CF8" },
   Cipher: { name: "Cipher", role: "Security", color: "#F87171" },
+  "Mr. Sullivan": { name: "Mr. Sullivan", role: "Trading", color: "#8FD4E4" },
 };
 
 export interface SwarmMessage {

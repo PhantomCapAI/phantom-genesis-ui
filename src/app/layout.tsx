@@ -26,8 +26,9 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased dark`}
+      style={{ backgroundColor: "#0A0A0A", colorScheme: "dark" }}
     >
-      <body className="min-h-full flex flex-col bg-[#0A0A0A] font-sans">
+      <body className="min-h-full flex flex-col bg-[#0A0A0A] text-white font-sans" style={{ backgroundColor: "#0A0A0A" }}>
         {children}
       </body>
     </html>
