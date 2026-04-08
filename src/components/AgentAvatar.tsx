@@ -6,6 +6,7 @@ const PFP_MAP: Record<string, string> = {
   Claire: "/claire.png",
   Nova: "/nova.png",
   Cipher: "/cipher.png",
+  "Mr. Sullivan": "/sullivan.png",
 };
 
 export function AgentAvatar({ name, size = 36 }: { name: string; size?: number }) {
