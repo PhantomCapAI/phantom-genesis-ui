@@ -85,14 +85,20 @@ export function SwarmChat({ sessionId }: { sessionId?: string }) {
       .then((data: SwarmMessage[]) => {
         allMessages = data;
         setTopic("Phantom Genesis — Autonomous Token Launch");
+        setStatus("live");
         interval = setInterval(() => {
           if (idx < allMessages.length) {
             setMessages((prev) => [...prev, allMessages[idx]]);
             idx++;
           } else {
+            setStatus("completed");
             clearInterval(interval);
           }
         }, 800);
+      })
+      .catch(() => {
+        setTopic("Phantom Genesis — Demo Unavailable");
+        setStatus("disconnected");
       });
 
     return () => clearInterval(interval);
