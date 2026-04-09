@@ -7,6 +7,7 @@ import { AgentRoster } from "./AgentRoster";
 import { PaywallGate } from "./PaywallGate";
 import { LaunchCountdown } from "./LaunchCountdown";
 import { TxDisplay } from "./TxDisplay";
+import { WalletButton } from "./WalletButton";
 
 const PREVIEW_SECONDS = 30;
 const SWARM_API = process.env.NEXT_PUBLIC_SWARM_API_URL || "";
@@ -153,7 +154,8 @@ export function SwarmChat({ sessionId }: { sessionId?: string }) {
               </span>
             )}
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
+            <WalletButton />
             <label className="flex items-center gap-1.5 cursor-pointer">
               <span className="text-[10px] text-zinc-600 font-mono">Demo</span>
               <button

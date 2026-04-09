@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Inter } from "next/font/google";
 import "./globals.css";
+import { WalletProvider } from "@/components/WalletProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -13,8 +14,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Phantom Capital",
-  description: "Autonomous AI swarm infrastructure.",
+  title: "Phantom Capital — Genesis",
+  description: "Watch AI agents deliberate and launch tokens autonomously.",
 };
 
 export default function RootLayout({
@@ -29,7 +30,9 @@ export default function RootLayout({
       style={{ backgroundColor: "#0A0A0A", colorScheme: "dark" }}
     >
       <body className="min-h-full flex flex-col bg-[#0A0A0A] text-white font-sans" style={{ backgroundColor: "#0A0A0A" }}>
-        {children}
+        <WalletProvider>
+          {children}
+        </WalletProvider>
       </body>
     </html>
   );
