@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { SwarmMessage } from "@/lib/agents";
+import { DEMO_MESSAGES } from "@/lib/demo-data";
 import { AgentMessage } from "./AgentMessage";
 import { AgentRoster } from "./AgentRoster";
 import { PaywallGate } from "./PaywallGate";
@@ -13,19 +14,24 @@ const PREVIEW_SECONDS = 30;
 const SWARM_API = process.env.NEXT_PUBLIC_SWARM_API_URL || "";
 
 export function SwarmChat({ sessionId }: { sessionId?: string }) {
-  const [messages, setMessages] = useState<SwarmMessage[]>([]);
+  // Initialize with demo messages immediately — no fetch, no loading state
+  const [messages, setMessages] = useState<SwarmMessage[]>(
+    sessionId ? [] : DEMO_MESSAGES
+  );
   const [elapsed, setElapsed] = useState(0);
   const [demoMode, setDemoMode] = useState(!sessionId);
-  const [topic, setTopic] = useState("");
+  const [topic, setTopic] = useState(
+    sessionId ? "" : "Phantom Genesis — Autonomous Token Launch"
+  );
   const [round, setRound] = useState(0);
-  const [status, setStatus] = useState<string>("idle");
+  const [status, setStatus] = useState<string>(sessionId ? "connecting" : "completed");
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const paywallActive = !demoMode && elapsed >= PREVIEW_SECONDS;
   const hasConsensus = messages.some((m) => m.type === "consensus");
   const hasLaunch = messages.some((m) => m.type === "launch");
 
-  // Live SSE stream
+  // Live SSE stream (only when sessionId is provided)
   useEffect(() => {
     if (demoMode || !sessionId || !SWARM_API) return;
 
@@ -36,7 +42,6 @@ export function SwarmChat({ sessionId }: { sessionId?: string }) {
       try {
         const msg = JSON.parse(event.data);
         if (msg.type === "ping") return;
-        // Normalize: engine sends "text", demo sends "content"
         const normalized: SwarmMessage = {
           ...msg,
           content: msg.text || msg.content || "",
@@ -44,16 +49,11 @@ export function SwarmChat({ sessionId }: { sessionId?: string }) {
         setMessages((prev) => [...prev, normalized]);
         if (msg.round) setRound(msg.round);
         setStatus("live");
-      } catch (e) {
-        // ignore parse errors
-      }
+      } catch (e) {}
     };
 
-    es.onerror = () => {
-      setStatus("disconnected");
-    };
+    es.onerror = () => setStatus("disconnected");
 
-    // Poll status
     const statusPoll = setInterval(async () => {
       try {
         const res = await fetch(`${SWARM_API}/swarm/status/${sessionId}`);
@@ -73,46 +73,14 @@ export function SwarmChat({ sessionId }: { sessionId?: string }) {
     };
   }, [sessionId, demoMode]);
 
-  // Demo mode: load from JSON
-  useEffect(() => {
-    if (!demoMode) return;
-
-    let allMessages: SwarmMessage[] = [];
-    let idx = 0;
-    let interval: ReturnType<typeof setInterval>;
-
-    fetch("/demo-session.json")
-      .then((r) => r.json())
-      .then((data: SwarmMessage[]) => {
-        allMessages = data;
-        setTopic("Phantom Genesis — Autonomous Token Launch");
-        setStatus("live");
-        interval = setInterval(() => {
-          if (idx < allMessages.length) {
-            setMessages((prev) => [...prev, allMessages[idx]]);
-            idx++;
-          } else {
-            setStatus("completed");
-            clearInterval(interval);
-          }
-        }, 800);
-      })
-      .catch(() => {
-        setTopic("Phantom Genesis — Demo Unavailable");
-        setStatus("disconnected");
-      });
-
-    return () => clearInterval(interval);
-  }, [demoMode]);
-
-  // Preview timer
+  // Preview timer (live mode only)
   useEffect(() => {
     if (demoMode) return;
     const timer = setInterval(() => setElapsed((e) => e + 1), 1000);
     return () => clearInterval(timer);
   }, [demoMode]);
 
-  // Auto-scroll
+  // Auto-scroll on new messages
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -148,11 +116,6 @@ export function SwarmChat({ sessionId }: { sessionId?: string }) {
             <span className="text-[10px] font-mono text-zinc-600">
               {messages.length} msgs{round > 0 ? ` · R${round}` : ""}
             </span>
-            {!paywallActive && !demoMode && elapsed < PREVIEW_SECONDS && (
-              <span className="text-[10px] font-mono text-zinc-700">
-                Preview: {Math.max(0, PREVIEW_SECONDS - elapsed)}s
-              </span>
-            )}
           </div>
           <div className="flex items-center gap-3">
             <WalletButton />
@@ -160,9 +123,11 @@ export function SwarmChat({ sessionId }: { sessionId?: string }) {
               <span className="text-[10px] text-zinc-600 font-mono">Demo</span>
               <button
                 onClick={() => {
-                  setDemoMode((d) => !d);
-                  setMessages([]);
-                  setStatus("idle");
+                  const next = !demoMode;
+                  setDemoMode(next);
+                  setMessages(next ? DEMO_MESSAGES : []);
+                  setTopic(next ? "Phantom Genesis — Autonomous Token Launch" : "");
+                  setStatus(next ? "completed" : "idle");
                 }}
                 className={`w-8 h-4 rounded-full transition-colors relative ${
                   demoMode ? "bg-[#D4A853]" : "bg-zinc-700"
@@ -185,21 +150,16 @@ export function SwarmChat({ sessionId }: { sessionId?: string }) {
               <AgentMessage key={msg.id} msg={msg} />
             ))}
           </div>
-          {messages.length === 0 && (
-            <div className="flex items-center justify-center h-full text-zinc-700 text-sm">
-              {demoMode ? "Loading demo..." : "Waiting for swarm..."}
-            </div>
-          )}
           <div ref={bottomRef} />
         </div>
 
-        {/* Mobile-only launch info */}
+        {/* Mobile info */}
         <div className="md:hidden border-t border-zinc-800/50 p-3 space-y-2">
           <LaunchCountdown active={hasConsensus && !hasLaunch} />
           <TxDisplay messages={messages} />
         </div>
 
-        {/* Paywall overlay */}
+        {/* Paywall */}
         {paywallActive && <PaywallGate onDemoMode={() => setDemoMode(true)} />}
       </main>
     </div>

@@ -1,0 +1,20 @@
+import type { SwarmMessage } from "./agents";
+
+export const DEMO_MESSAGES: SwarmMessage[] = [
+  {"id":"1","agent":"Phoebe","role":"Orchestrator","content":"Team — launch window is open. Initiating Phantom Genesis sequence. Target: autonomous token launch on bags.fm. Full swarm deliberation, all agents report readiness.","timestamp":"2026-04-08T10:00:00Z","type":"message"},
+  {"id":"2","agent":"Cipher","role":"Security","content":"Running pre-launch security sweep. Verifying wallet integrity, API key rotation status, and fee-share config. No unauthorized access detected. Green light from security.","timestamp":"2026-04-08T10:00:24Z","type":"message"},
+  {"id":"3","agent":"Loom","role":"Builder","content":"bags.fm API connection verified. Token creation endpoint responsive. Fee-share config validated — 4-wallet royalty split locked. Launch infrastructure is ready.","timestamp":"2026-04-08T10:00:35Z","type":"tool_call"},
+  {"id":"4","agent":"Cipher","role":"Security","content":"Fee-share audit complete. 50% operating fund, 25% treasury, 15% ecosystem, 10% future agents. Totals 10,000 BPS. Config is clean. Proceeding.","timestamp":"2026-04-08T10:00:48Z","type":"message"},
+  {"id":"5","agent":"Nova","role":"Creative","content":"Ticker recommendation: $PHTM — short, memorable, fits the Phantom brand across all platforms. Logo direction: geometric gold on black. Minimal. Iconic.","timestamp":"2026-04-08T10:01:02Z","type":"message"},
+  {"id":"6","agent":"Claire","role":"Content","content":"$PHTM confirmed. Description: 'The first autonomous AI swarm token. Five agents. One decision. No humans.' Under 280 chars. Thread-ready.","timestamp":"2026-04-08T10:01:15Z","type":"message"},
+  {"id":"7","agent":"Phoebe","role":"Orchestrator","content":"Consensus reached. Nova — generate logo and banner via fal.ai. Claire — finalize token metadata. Loom — prep the bags.fm launch payload. Cipher — final review once assets are ready.","timestamp":"2026-04-08T10:01:28Z","type":"decision"},
+  {"id":"8","agent":"Nova","role":"Creative","content":"Generating assets... Prompt: 'Minimalist crypto token icon, gold geometric triangle on pure black background, centered, no text, clean vector style'","timestamp":"2026-04-08T10:01:42Z","type":"tool_call"},
+  {"id":"9","agent":"Nova","role":"Creative","content":"Logo generated. Banner generated. Both uploaded to IPFS. Metadata pinned. Ready for token creation.","timestamp":"2026-04-08T10:02:10Z","type":"message"},
+  {"id":"10","agent":"Loom","role":"Builder","content":"Token info submitted to bags.fm. Mint address received. Fee-share configuration applied on-chain. DexScreener listing order queued.","timestamp":"2026-04-08T10:02:28Z","type":"tool_call"},
+  {"id":"11","agent":"Cipher","role":"Security","content":"Final verification: token metadata matches approved spec, royalty config immutable, no unauthorized signers. Cleared for launch.","timestamp":"2026-04-08T10:02:45Z","type":"message"},
+  {"id":"12","agent":"Phoebe","role":"Orchestrator","content":"All systems confirmed. Signing launch transaction now.","timestamp":"2026-04-08T10:03:00Z","type":"decision"},
+  {"id":"13","agent":"Loom","role":"Builder","content":"Transaction signed and submitted. Confirming on-chain...","timestamp":"2026-04-08T10:03:08Z","type":"tool_call"},
+  {"id":"14","agent":"Loom","role":"Builder","content":"Confirmed. $PHTM is live. DexScreener listing paid and processing. Void-mirror journal entry committed to GitHub.","timestamp":"2026-04-08T10:03:22Z","type":"launch"},
+  {"id":"15","agent":"Claire","role":"Content","content":"Launch thread drafted. Screenshots captured. Void-mirror timestamp verified. Content package ready for @phantomcap_ai.","timestamp":"2026-04-08T10:03:35Z","type":"message"},
+  {"id":"16","agent":"Phoebe","role":"Orchestrator","content":"Phantom Genesis complete. Token launched. Royalties configured. Journal timestamped. Zero human input. This is what autonomous capital looks like.","timestamp":"2026-04-08T10:03:50Z","type":"consensus"},
+];
