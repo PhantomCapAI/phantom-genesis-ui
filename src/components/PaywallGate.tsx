@@ -1,6 +1,6 @@
 "use client";
 
-const TREASURY = process.env.NEXT_PUBLIC_TREASURY_WALLET ?? "CGzf9GUK8DYd2kze7CKhEU2Hmr6kTifueYaWJ1SWekVc";
+const TREASURY = process.env.NEXT_PUBLIC_TREASURY_WALLET ?? "HmW2bQeLpJv3FJrSBV1jeyra2oof5rq6uBkB1cSLnSAK";
 
 export function PaywallGate({ onDemoMode }: { onDemoMode: () => void }) {
   return (
